@@ -1,3 +1,32 @@
-body{
-	background 	: #f0f0f0;
+body {
+  padding: 20px;
+  background-color:#f0f0f0
 }
+
+p { margin : 0; }
+
+#topBar{
+	border 			: 1px solid black;
+	background-color: white;
+	height 			: 10vh;
+	width 			: 100vw;
+	position 		: relative;
+	top 			: 0px;
+}
+
+
+#map{
+	background-color: #ffff99;
+	position 		: absolute;
+}
+
+#bottomBar{
+	border 			:	1px solid black;
+	background-color: #ccccff;
+	height 			: 10vh;
+	width 			:100vw;
+	min-height 		: 40px; 
+	position: fixed;
+	bottom 	: 0px;
+}
+

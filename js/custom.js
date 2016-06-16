@@ -66,7 +66,7 @@ $(document).ready(function(){
 		location.reload();
 	}
 
-	function logoutHandler();
+	// function logoutHandler();
 		location.reload();
 
 	function validateUserReg( username, pass1, pass2 ){
