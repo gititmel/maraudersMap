@@ -4,9 +4,6 @@ function initMap() {
     zoom: 15
     });
 
-var submitLocation = 
- 
-
         // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -20,10 +17,10 @@ var submitLocation =
 
      var infoWindow = new google.maps.InfoWindow({
         map: map,
+        content: 'Location found: ' + lat +" , "+ lng,
       });
 
-       infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found: ' + lat +" , "+ lng);
+      // infoWindow.setPosition(pos);
       
       map.setCenter(pos);
 
