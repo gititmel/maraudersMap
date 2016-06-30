@@ -37,13 +37,14 @@
  	 </div>
 
 	<div class="row" id="bottomBar">
-		<input type="button" value="Show my location" onclick="geoFindMe()">
+		
 	</div>
 
  <script type="text/javascript" src="js/mapSubmit.js"></script>
    <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR0JUJgFB1hzr_L8OLDWceixaGAGUEH2o&callback=initMap">
     </script>
+    <script src="js/rating.min.js"></script>
   </body>
 </html>
 

@@ -5,16 +5,24 @@
 	 */
 	class dbCon{
 		//Update these to match your database
+		private $conn;
+		public $data;
 		private $db;
-		private $dbName 	= 'feo_app1';
+		private $dbName 	= 'feo_mmap	';
 		private $username 	= 'root';
 		private $password	= '';
 		private $host 		= 'localhost';
 
 
-		public function __construct() {
-			$this->db = new mysqli( $this->host, $this->username, $this->password, $this->dbName );	
+		public function __construct(){
+		
+		$this->db = new mysqli( $this->host, $this->username, $this->password, $this->dbName );
+		// Check connection
+		if ($this->db->connect_error) {
+	    	die("Connection failed: " . $this->db->connect_error);
+			} 	
 		}
+
 		
 		/**
 		 * getDB() selects the database connection
@@ -34,22 +42,21 @@
 		 * pullRecord() gets all the records in a table
 		 * $tID 		is the database table name
 		 */
-		public function pullRecord( $tID ) {
-			$where = array();
-			$result = $this->sqlExecute( 'select', $tID, $where );
-			$retArr = array();
-			while ( $row = $result->fetch_assoc() ) {
-				$retArr[] = $row;
-			}
-		  return $retArr;
+		public function handleDemoData( $userInput ){
+		$ins = "INSERT INTO demotable(userInput) VALUES('" .$userInput. "')";
+		$this->db->query($ins);
+		return true;
 		}
+		
+
 
 		/**
 		 * pullRecordWithParameters() selects a record from the database using parameters 
 		 * sent to as an array
 		 * $tID 				is the database table name
 		 * $where 				parameters for record search
-		 */
+		 
+	CODE ---> 	 
 		public function pullRecordWithParameters( $tID, $where ) {
 
 			if( !isset( $where ) ) $where = array();

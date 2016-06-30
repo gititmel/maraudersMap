@@ -1,40 +1,49 @@
+var submitBox, lat, lng, map, marker, infoWindow, pos
+
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
+  map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15
     });
+
+  submitBox = "<table>" +
+                 "<tr><td>Type:</td> <td><select id='type'>" +
+                 "<option value='bathroom' SELECTED>Bathroom</option>" +
+                 "<option value='toilet'>Toilet</option>" +
+                  "<option value='water'>Water fountain</option>" +
+                 "</select> </td></tr>" +
+                 "<tr><td></td><td><input type='button' value='submit' onclick='saveData()'/></td></tr>";
 
         // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-    var pos = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
+      pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
       };
 
-    var lat = position.coords.latitude;
-    var lng = position.coords.longitude;
-
-     var infoWindow = new google.maps.InfoWindow({
-        map: map,
-        content: 'Location found: ' + lat +" , "+ lng,
-      });
+    lat = position.coords.latitude;
+    lng = position.coords.longitude;
 
       // infoWindow.setPosition(pos);
       
-      map.setCenter(pos);
+    map.setCenter(pos);
 
-    var marker = new google.maps.Marker({
+    marker = new google.maps.Marker({
       map: map,
       position: pos,
       title: "You are here",
       animation: google.maps.Animation.DROP,
     });
 
+    infoWindow = new google.maps.InfoWindow({
+      content: submitBox
+    });
+
       marker.addListener('click', function() {
       infoWindow.open(map, marker);
     });
-            console.log(pos);
+
+     console.log(pos);
     },
 
           function() {
@@ -54,3 +63,40 @@ function initMap() {
                               'Error: The Geolocation service failed.' :
                               'Error: Your browser doesn\'t support geolocation.');
       }
+
+function saveData() {
+
+console.log(pos)
+      var type = document.getElementById("type").value;
+     // var latlng =pos;
+
+      $.post("submitData.php",{type: type, lat: pos.lat, lng: pos.lng}).done(function(data){
+        console.log(data)
+      })
+
+      // var url = "submitData.php?type=" + type + "&lat=" + latlng.lat() + "&lng=" + latlng.lng();
+      // downloadUrl(url, function(data, responseCode) {
+      //   if (responseCode == 200 && data.length >= 1) {
+      //     infowindow.close();
+      //     document.getElementById("message").innerHTML = "Location added.";
+      //   }
+      // });
+    }
+
+function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+          new ActiveXObject('Microsoft.XMLHTTP') :
+          new XMLHttpRequest;
+
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          request.onreadystatechange = doNothing;
+          callback(request.responseText, request.status);
+        }
+      };
+
+      request.open('POST', url, true);
+      request.send(null);
+    }
+
+    function doNothing() {}
