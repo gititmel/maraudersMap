@@ -1,9 +1,66 @@
-var submitBox, lat, lng, map, marker, infoWindow, pos
+var submitBox, lat, lng, map, marker, infoWindow, pos , zip
 
+$(document).ready(function(){
+    setTimeout(function(){
+      $.get("https://maps.googleapis.com/maps/api/geocode/json?&latlng="+lat+","+lng).done(function(googleData){
+
+        // console.log(googleData)
+      //   console.log(googleData.results)
+      //   console.log(googleData.results[0])
+      //   console.log(googleData.results[0].address_components)
+      //   console.log(googleData.results[0].address_components[7])
+      // console.log(googleData.results[0].address_components[7].long_name)
+
+      zip = googleData.results[0].address_components[7].long_name;
+
+      })
+
+    },500)
+    
+    $.get("search.php").done(function(searchResults){
+      console.log(searchResults);
+    })
+      
+      
+  })
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15
     });
+
+   var geocoder = new google.maps.Geocoder();
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+          document.getElementById('address').addEventListener('keyup', function(e) {
+         
+
+         if(e.keyCode==13)
+          {geocodeAddress(geocoder, map);}
+
+
+        });
+
+        function geocodeAddress(geocoder, resultsMap) {
+        
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+        
+        if (status === google.maps.GeocoderStatus.OK) {
+            resultsMap.setCenter(results[0].geometry.location);
+            var addMarker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+            console.log(results[0].geometry.location);
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+
+        addMarker.setMap(map);
+      }
 
   submitBox = "<table>" +
                  "<tr><td>Type:</td> <td><select id='type'>" +
@@ -55,7 +112,9 @@ function initMap() {
           // Browser doesn't support Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
         }
-      }
+  }
+
+
 
       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
@@ -70,7 +129,7 @@ console.log(pos)
       var type = document.getElementById("type").value;
      // var latlng =pos;
 
-      $.post("submitData.php",{type: type, lat: pos.lat, lng: pos.lng}).done(function(data){
+      $.post("submitData.php",{type: type, lat: pos.lat, lng: pos.lng, zip:zip }).done(function(data){
         console.log(data)
       })
 

@@ -23,13 +23,13 @@
   <body>
  
  	 <div class="row" id="topBar">
- 	 		<form class="form-search">
+ 	 		<!-- <form class="form-search"> -->
 			<div class="input-append">
-		    	<input type="text" class="span2 search-query">
-		    	<button type="submit" class="btn">Search</button>	
+		    	<input id="address" type="text">
+		    	<input id ="submit" type="button" class="btn" value="Go!">
 		    	<i class="fa fa-search" aria-hidden="true"></i>
 	  		</div>
-		</form> 
+		<!-- </form>  -->
 	</div>
 
  	 <div class="row" id="centerBar">

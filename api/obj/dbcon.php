@@ -8,7 +8,7 @@
 		private $conn;
 		public $data;
 		private $db;
-		private $dbName 	= 'feo_mmap	';
+		private $dbName 	= 'feo_mmap';
 		private $username 	= 'root';
 		private $password	= '';
 		private $host 		= 'localhost';
@@ -20,10 +20,30 @@
 		// Check connection
 		if ($this->db->connect_error) {
 	    	die("Connection failed: " . $this->db->connect_error);
-			} 	
+			}
+		// else {
+		// 	echo "success";} 	
 		}
 
-		
+		public function search(){
+
+			$arr = array();
+
+			$sql = "SELECT * FROM submitlocation";
+			$r = $this->db->query($sql);
+
+			$num = $r->num_rows;
+			// print_r($r);
+			for($i = 0; $i < $num; $i++){ 
+							$row = mysqli_fetch_array($r);
+							// print_r($row);
+
+							array_push($arr, array("id"=>$row['ID'], "lat"=>$row['lat'], "lng"=>$row['lng'], "type"=>$row['type'], "zip"=>$row['zip']));
+						}
+			// print_r($arr);
+			echo json_encode($arr);			
+		}
+	
 		/**
 		 * getDB() selects the database connection
 		 */
@@ -42,9 +62,10 @@
 		 * pullRecord() gets all the records in a table
 		 * $tID 		is the database table name
 		 */
-		public function handleDemoData( $userInput ){
-		$ins = "INSERT INTO demotable(userInput) VALUES('" .$userInput. "')";
+		public function handleDemoData( $lat, $lng, $type, $zip ){
+		$ins = "INSERT INTO submitlocation( lat, lng, type, zip ) VALUES( ".$lat.", ".$lng.",  '" .$type. "', ".$zip.")";
 		$this->db->query($ins);
+
 		return true;
 		}
 		
