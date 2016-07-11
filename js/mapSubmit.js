@@ -1,42 +1,163 @@
-var map;
+var submitBox, lat, lng, map, marker, infoWindow, pos, zip
+
+$(document).ready(function(){
+    setTimeout(function(){
+      $.get("https://maps.googleapis.com/maps/api/geocode/json?&latlng="+lat+","+lng).done(function(googleData){
+
+        // console.log(googleData)
+      //   console.log(googleData.results)
+      //   console.log(googleData.results[0])
+      //   console.log(googleData.results[0].address_components)
+      //   console.log(googleData.results[0].address_components[7])
+      // console.log(googleData.results[0].address_components[7].long_name)
+
+      zip = googleData.results[0].address_components[7].long_name;
+
+      })
+
+    },500)
+    
+    $.get("api/obj/search.php").done(function(searchResults){
+      console.log(searchResults);
+    });
+      
+      
+  })
+
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 40.7413549, lng: -73.9980244},
-    zoom: 13
+    zoom: 15
   });
 
-}
+  var geocoder = new google.maps.Geocoder();
 
-// function geoFindMe() {
-//   var output = document.getElementById("out");
+  document.getElementById('submit').addEventListener('click', function() {
+    geocodeAddress(geocoder, map);
+  });
 
-//   if (!navigator.geolocation){
-//     output.innerHTML = "<p>Geolocation is not supported by your browser</p>";
-//     return;
-//   }
+  // #address (below) not responding by ENTER key **
+  document.getElementById('address').addEventListener('keyup', function(e) {
+    if(e.keyCode==13){
+      geocodeAddress(geocoder, map);}
+  });
 
-//   function success(position) {
-//     var latitude  = position.coords.latitude;
-//     var longitude = position.coords.longitude;
+  function geocodeAddress(geocoder, resultsMap) {
 
-//     output.innerHTML = '<p>Latitude is ' + latitude + '° <br>Longitude is ' + longitude + '°</p>';
+    var address = document.getElementById('address').value;
+    geocoder.geocode({'address': address}, function(results, status) {
+
+      if (status === google.maps.GeocoderStatus.OK) {
+        resultsMap.setCenter(results[0].geometry.location);
+
+        var addMarker = new google.maps.Marker({
+          map     : resultsMap,
+          position: results[0].geometry.location
+        });
+          
+          console.log(results[0].geometry.location);
+          
+          addMarker.setMap(map);
+          
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+  }
+
+  submitBox = "<table>" +
+                 "<tr><td>Type:</td> <td><select id='type'>" +
+                 "<option value='bathroom' SELECTED>Bathroom</option>" +
+                 "<option value='toilet'>Toilet</option>" +
+                  "<option value='water'>Water fountain</option>" +
+                 "</select> </td></tr>" +
+                 "<tr><td></td><td><input type='button' value='submit' onclick='saveData()'/></td></tr>";
+
+        // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+    lat = position.coords.latitude;
+    lng = position.coords.longitude;
+
+      // infoWindow.setPosition(pos);
+      
+    map.setCenter(pos);
+
+    marker = new google.maps.Marker({
+      map: map,
+      position: pos,
+      title: "You are here",
+      animation: google.maps.Animation.DROP,
+    });
+
+    infoWindow = new google.maps.InfoWindow({
+      content: submitBox
+    });
+
+      marker.addListener('click', function() {
+      infoWindow.open(map, marker);
+    });
+
+     console.log(pos);
+    },
+
+          function() {
+            handleLocationError(true,infoWindow, map.getCenter());
+          });
+  } 
+
+        else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+  }
 
 
-//     var img = new Image();
-//     img.src = "https://maps.googleapis.com/maps/api/staticmap?center=" + latitude + "," + longitude + "&zoom=13&size=300x300&sensor=false";
 
-//     output.appendChild(img);
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
 
+function saveData() {
 
+console.log(pos)
+      var type = document.getElementById("type").value;
+     // var latlng =pos;
 
-//   };
+      $.post("submitData.php",{type: type, lat: pos.lat, lng: pos.lng, zip:zip }).done(function(data){
+        console.log(data)
+      })
 
-//error message if no geolocation
-//   function error() {
-//     output.innerHTML = "Unable to retrieve your location";
-//   };
+      // var url = "submitData.php?type=" + type + "&lat=" + latlng.lat() + "&lng=" + latlng.lng();
+      // downloadUrl(url, function(data, responseCode) {
+      //   if (responseCode == 200 && data.length >= 1) {
+      //     infowindow.close();
+      //     document.getElementById("message").innerHTML = "Location added.";
+      //   }
+      // });
+    }
 
-//   output.innerHTML = "<p>Locating…</p>";
+function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+          new ActiveXObject('Microsoft.XMLHTTP') :
+          new XMLHttpRequest;
 
-//   navigator.geolocation.getCurrentPosition(success, error);
-// }
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          request.onreadystatechange = doNothing;
+          callback(request.responseText, request.status);
+        }
+      };
+
+      request.open('POST', url, true);
+      request.send(null);
+    }
+
+    function doNothing() {}

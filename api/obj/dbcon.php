@@ -5,17 +5,38 @@
 	 */
 	class dbCon{
 		//Update these to match your database
+		private $conn;
+		public $data;
 		private $db;
-		private $dbName 	= 'feo_app1';
+		private $dbName 	= 'feo_mmap';
 		private $username 	= 'root';
 		private $password	= '';
 		private $host 		= 'localhost';
-
-
-		public function __construct() {
-			$this->db = new mysqli( $this->host, $this->username, $this->password, $this->dbName );	
-		}
+		public function __construct(){
 		
+		$this->db = new mysqli( $this->host, $this->username, $this->password, $this->dbName );
+		// Check connection
+		if ($this->db->connect_error) {
+	    	die("Connection failed: " . $this->db->connect_error);
+			}
+		// else {
+		// 	echo "success";} 	
+		}
+		public function search(){
+			$arr = array();
+			$sql = "SELECT * FROM submitlocation";
+			$r = $this->db->query($sql);
+			$num = $r->num_rows;
+			// print_r($r);
+			for($i = 0; $i < $num; $i++){ 
+							$row = mysqli_fetch_array($r);
+							// print_r($row);
+							array_push($arr, array("id"=>$row['ID'], "lat"=>$row['lat'], "lng"=>$row['lng'], "type"=>$row['type'], "zip"=>$row['zip']));
+						}
+			// print_r($arr);
+			echo json_encode($arr);			
+		}
+	
 		/**
 		 * getDB() selects the database connection
 		 */
@@ -29,39 +50,32 @@
 		public function closeDb() {
 			$this->db->close();
 		}
-
 		/**
 		 * pullRecord() gets all the records in a table
 		 * $tID 		is the database table name
 		 */
-		public function pullRecord( $tID ) {
-			$where = array();
-			$result = $this->sqlExecute( 'select', $tID, $where );
-			$retArr = array();
-			while ( $row = $result->fetch_assoc() ) {
-				$retArr[] = $row;
-			}
-		  return $retArr;
+		public function handleDemoData( $lat, $lng, $type, $zip ){
+		$ins = "INSERT INTO submitlocation( lat, lng, type, zip ) VALUES( ".$lat.", ".$lng.",  '" .$type. "', ".$zip.")";
+		$this->db->query($ins);
+		return true;
 		}
-
+		
 		/**
 		 * pullRecordWithParameters() selects a record from the database using parameters 
 		 * sent to as an array
 		 * $tID 				is the database table name
 		 * $where 				parameters for record search
-		 */
+		 
+	CODE ---> 	 
 		public function pullRecordWithParameters( $tID, $where ) {
-
 			if( !isset( $where ) ) $where = array();
 			$result = $this->sqlExecute( 'select', $tID, $where );
 			$retArr = array();
-
 			while ($row = $result->fetch_assoc()) {
 				$retArr[] = $row;
 			}
 		  return $retArr;
 		}
-
 		/**
 		 * inserRecord() inserts a record into a database table
 		 * $table 		database table name
@@ -70,7 +84,6 @@
 		 * RETURN 		this returns the record ID of the new user
 		 */
 		public function insertRecord( $table, $fields, $values ){
-
 			//Clean up the incoming fields from malicious scripts
 			for( $i = 0; $i < count($fields); $i++ ){ $fields[$i] = cleanUp( $fields[$i] ); }
 			//Clean up the incoming values from malicious scripts
@@ -85,7 +98,6 @@
 			//Return Query to UserManager()
 			return $insertedIndex;
 		}
-
 		/**
 		 * updateRecord() updates a record in database tables
 		 * $table 			database table name
@@ -95,10 +107,8 @@
 		 $ $whereVal 		array of field value conditions
 		 */
 		public function updateRecord( $table, $fields, $values, $where, $whereVal ){
-
 			$qryStr = '';
 			$qryStr .= 'UPDATE '.$table.' set ';
-
 			if (isset($fields) && count($fields)>0) {
 				for($f = 0; $f < count($fields); $f++ ) {
 					$values[$f] = cleanUp( $values[$f] ); 
@@ -107,13 +117,10 @@
 					}else{ 
 						$values[$f] = $values[$f]; 
 					} 
-
 					$qryStr .= $fields[$f].' = '.$values[$f];
 				}
 			}
-
 			$qryStr .= ' WHERE ';
-
 			if (isset($where) && count($where)>0) {
 				for($w = 0; $w < count($where); $w++ ) {
 					if( !is_numeric ($whereVal[$w] ) ){ 
@@ -129,12 +136,10 @@
 					}
 				}
 			}
-
 			$result 		= $this->db->query($qryStr);
 			
 			return $result;
 		}
-
 		/**
 		 * sqlExecute() private method. This method executes the queries on database
 		 */
@@ -171,6 +176,5 @@
 			}
 		  return $result;
 		}
-
 	}
 ?>

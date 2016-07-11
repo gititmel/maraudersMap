@@ -1,32 +1,88 @@
-p { margin : 0; }
+html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+#map {
+        height: 100%;
+      }
 
 #topBar{
-/*	background-color: #52595B;
-*/	background 		: white;
+	background 		: white;
 	height 			: 10vh;
 	width 			: 100vw;
 	position 		: fixed;
 	top 			: 0px;
 }
 
-#map{
-	height 			: 100%;
+#title{
+	position 	: absolute;
+	left 		: 0px;
+	height 		: 100%;
 }
 
+
 #centerBar{
-/*	background-color: #ffff99;
-*/	position 		: absolute;
+	position 		: absolute;
 	top 			: 10vh;
 	height 			: 80vh;
 	width 			: 100%;
 }
 
-#bottomBar{
+#searchBar{
+	margin 		: auto;
+	padding 	: 2vh;
+	position 	: absolute;
+	right 		: 0px;
+	height 		: 100%;
+
+}
+
+h2{
+	font-family	: "Trebuchet MS", Helvetica, sans-serif;
+	letter-spacing: 2px;
+}
+
+/*#bottomBar{
 	background-color: #52595B;
 	height 			: 10vh;
 	width 			: 100vw;
-/*	min-height 		: 40px; 
-*/	position: fixed;
-	bottom 	: 0px;
+	position		: fixed;
+	bottom 			: 0px;
+}*/
+
+#about-page{
+	background 	: #52595B;
+	position 	: fixed;
+	bottom 		: 0px;
+	left 		: 0px;
+	height 		: 10vh;
+	width 		: 50%;
 }
 
+#about-page:hover{
+	color 		: white;
+}
+
+#submit-form{
+	background 	: #52595B;
+	position 	: fixed;
+	right 		: 0px;
+	bottom 		: -80vh;
+	width 		: 50%;
+	height 		: 90vh;
+}
+
+#click-submit:hover{
+	color 		: white;
+}
+
+#click-close{
+	position 	:absolute;
+	right 		:5px;
+	top 		:5px;
+}
+#click-close:hover{
+	color 		:white;
+}
