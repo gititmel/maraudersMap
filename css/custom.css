@@ -3,6 +3,10 @@ html, body {
         margin: 0;
         padding: 0;
       }
+*{
+	font-family	: "Trebuchet MS", Helvetica, sans-serif;
+}
+
 #map {
         height: 100%;
       }
@@ -15,6 +19,11 @@ html, body {
 	top 			: 0px;
 }
 
+#title{
+	position 	: absolute;
+	left 		: 0px;
+	height 		: 100%;
+}
 
 
 #centerBar{
@@ -24,11 +33,129 @@ html, body {
 	width 			: 100%;
 }
 
+#searchBar{
+	margin 		: auto;
+	padding 	: 2vh;
+	position 	: absolute;
+	right 		: 0px;
+	height 		: 100%;
 
-#bottomBar{
+}
+
+h2{
+	letter-spacing: 2px;
+}
+
+h1{
+	letter-spacing 	: 4px;
+	padding-left	: 2vw; 
+}
+
+/*#bottomBar{
 	background-color: #52595B;
 	height 			: 10vh;
 	width 			: 100vw;
-	position: fixed;
+	position		: fixed;
 	bottom 			: 0px;
+}*/
+
+#about-page{
+	background 	: #52595B;
+	position 	: fixed;
+	left 		: 0px;
+	bottom 		: -80vh;
+	width 		: 50%;
+	height 		: 90vh;
+}
+
+#about-page:hover{
+	color 		: white;
+}
+
+#submit-page{
+	background 	: #52595B;
+	position 	: fixed;
+	right 		: 0px;
+	bottom 		: -80vh;
+	width 		: 50%;
+	height 		: 90vh;
+}
+
+#click-submit:hover{
+	color 		: white;
+}
+
+#click-close-sub{
+	position 	:absolute;
+	right 		:2vw;
+	top 		:5px;
+}
+#click-close-sub:hover{
+	color 		:white;
+}
+
+#click-close-ab{
+	position 	:absolute;
+	right 		:2vw;
+	top 		:5px;
+}
+#click-close-ab:hover{
+	color 		:white;
+}
+
+
+.rating {
+    float:left;
+}
+
+/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
+   follow these rules. Every browser that supports :checked also supports :not(), so
+   it doesn’t make the test unnecessarily selective */
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
 }

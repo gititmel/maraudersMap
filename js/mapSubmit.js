@@ -1,4 +1,4 @@
-var submitBox, lat, lng, map, marker, infoWindow, pos , zip
+var submitBox, lat, lng, map, marker, infoWindow, pos, zip
 
 $(document).ready(function(){
     setTimeout(function(){
@@ -17,50 +17,52 @@ $(document).ready(function(){
 
     },500)
     
-    $.get("search.php").done(function(searchResults){
+    $.get("api/obj/search.php").done(function(searchResults){
       console.log(searchResults);
-    })
+    });
       
       
   })
+
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15
-    });
+  });
 
-   var geocoder = new google.maps.Geocoder();
+  var geocoder = new google.maps.Geocoder();
 
-        document.getElementById('submit').addEventListener('click', function() {
-          geocodeAddress(geocoder, map);
+  document.getElementById('submit').addEventListener('click', function() {
+    geocodeAddress(geocoder, map);
+  });
+
+  // #address (below) not responding by ENTER key **
+  document.getElementById('address').addEventListener('keyup', function(e) {
+    if(e.keyCode==13){
+      geocodeAddress(geocoder, map);}
+  });
+
+  function geocodeAddress(geocoder, resultsMap) {
+
+    var address = document.getElementById('address').value;
+    geocoder.geocode({'address': address}, function(results, status) {
+
+      if (status === google.maps.GeocoderStatus.OK) {
+        resultsMap.setCenter(results[0].geometry.location);
+
+        var addMarker = new google.maps.Marker({
+          map     : resultsMap,
+          position: results[0].geometry.location
         });
-          document.getElementById('address').addEventListener('keyup', function(e) {
-         
-
-         if(e.keyCode==13)
-          {geocodeAddress(geocoder, map);}
-
-
-        });
-
-        function geocodeAddress(geocoder, resultsMap) {
-        
-        var address = document.getElementById('address').value;
-        geocoder.geocode({'address': address}, function(results, status) {
-        
-        if (status === google.maps.GeocoderStatus.OK) {
-            resultsMap.setCenter(results[0].geometry.location);
-            var addMarker = new google.maps.Marker({
-              map: resultsMap,
-              position: results[0].geometry.location
-            });
-            console.log(results[0].geometry.location);
+          
+          console.log(results[0].geometry.location);
+          
+          addMarker.setMap(map);
+          
           } else {
             alert('Geocode was not successful for the following reason: ' + status);
           }
         });
-
-        addMarker.setMap(map);
-      }
+  }
 
   submitBox = "<table>" +
                  "<tr><td>Type:</td> <td><select id='type'>" +
