@@ -1,4 +1,4 @@
-var submitBox, lat, lng, map, marker, infoWindow, pos, zip
+var submitBox, lat, lng, map, marker, infoWindow, pos, zip, ratingValue
 
 $(document).ready(function(){
     setTimeout(function(){
@@ -18,8 +18,14 @@ $(document).ready(function(){
     },500)
     
     $.get("api/obj/search.php").done(function(searchResults){
-      console.log(searchResults);
+      console.log("SEARCH RESULTS: "+searchResults);
     });
+
+    $("#rate input[type='radio']").click( function(){
+      //console.log( $(this) )
+      ratingValue = $(this).val()
+     //console.log( ratingValue )
+    })
       
       
   })
@@ -35,9 +41,10 @@ function initMap() {
     geocodeAddress(geocoder, map);
   });
 
-  // #address (below) not responding by ENTER key **
   document.getElementById('address').addEventListener('keyup', function(e) {
     if(e.keyCode==13){
+      e.preventDefault()
+
       geocodeAddress(geocoder, map);}
   });
 
@@ -47,6 +54,7 @@ function initMap() {
     geocoder.geocode({'address': address}, function(results, status) {
 
       if (status === google.maps.GeocoderStatus.OK) {
+
         resultsMap.setCenter(results[0].geometry.location);
 
         var addMarker = new google.maps.Marker({
@@ -57,12 +65,16 @@ function initMap() {
           console.log(results[0].geometry.location);
           
           addMarker.setMap(map);
+
+          saveData();
           
           } else {
             alert('Geocode was not successful for the following reason: ' + status);
           }
         });
-  }
+    } //end geocodeAddress fnc
+
+
 
   submitBox = "<table>" +
                  "<tr><td>Type:</td> <td><select id='type'>" +
@@ -126,14 +138,13 @@ function initMap() {
       }
 
 function saveData() {
+  var type = document.getElementById("type").value;
+  var latlng = pos;
+  var rate = ratingValue; 
 
-console.log(pos)
-      var type = document.getElementById("type").value;
-     // var latlng =pos;
-
-      $.post("submitData.php",{type: type, lat: pos.lat, lng: pos.lng, zip:zip }).done(function(data){
-        console.log(data)
-      })
+  $.post("submitData.php",{type: type, lat: pos.lat, lng: pos.lng, zip:zip, rate:rate }).done(function(data){
+    console.log(data)
+  })
 
       // var url = "submitData.php?type=" + type + "&lat=" + latlng.lat() + "&lng=" + latlng.lng();
       // downloadUrl(url, function(data, responseCode) {
@@ -141,23 +152,25 @@ console.log(pos)
       //     infowindow.close();
       //     document.getElementById("message").innerHTML = "Location added.";
       //   }
-      // });
+    //  });
+
     }
 
-function downloadUrl(url, callback) {
-      var request = window.ActiveXObject ?
-          new ActiveXObject('Microsoft.XMLHTTP') :
-          new XMLHttpRequest;
 
-      request.onreadystatechange = function() {
-        if (request.readyState == 4) {
-          request.onreadystatechange = doNothing;
-          callback(request.responseText, request.status);
-        }
-      };
+// function downloadUrl(url, callback) {
+//       var request = window.ActiveXObject ?
+//           new ActiveXObject('Microsoft.XMLHTTP') :
+//           new XMLHttpRequest;
 
-      request.open('POST', url, true);
-      request.send(null);
-    }
+//       request.onreadystatechange = function() {
+//         if (request.readyState == 4) {
+//           request.onreadystatechange = doNothing;
+//           callback(request.responseText, request.status);
+//         }
+//       };
 
-    function doNothing() {}
+//       request.open('POST', url, true);
+//       request.send(null);
+//     }
+
+//     function doNothing() {}

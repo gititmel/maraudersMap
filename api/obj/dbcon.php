@@ -4,7 +4,6 @@
 	 * use the dbCon() methods to send or get data to and from database.
 	 */
 	class dbCon{
-		//Update these to match your database
 		private $conn;
 		public $data;
 		private $db;
@@ -27,11 +26,12 @@
 			$sql = "SELECT * FROM submitlocation";
 			$r = $this->db->query($sql);
 			$num = $r->num_rows;
-			// print_r($r);
+			
+			print_r($r);
 			for($i = 0; $i < $num; $i++){ 
 							$row = mysqli_fetch_array($r);
 							// print_r($row);
-							array_push($arr, array("id"=>$row['ID'], "lat"=>$row['lat'], "lng"=>$row['lng'], "type"=>$row['type'], "zip"=>$row['zip']));
+							array_push($arr, array("id"=>$row['ID'], "lat"=>$row['lat'], "lng"=>$row['lng'], "type"=>$row['type'], "zip"=>$row['zip'], "rate"=>$row['rate']));
 						}
 			// print_r($arr);
 			echo json_encode($arr);			
@@ -54,8 +54,8 @@
 		 * pullRecord() gets all the records in a table
 		 * $tID 		is the database table name
 		 */
-		public function handleDemoData( $lat, $lng, $type, $zip ){
-		$ins = "INSERT INTO submitlocation( lat, lng, type, zip ) VALUES( ".$lat.", ".$lng.",  '" .$type. "', ".$zip.")";
+		public function handleDemoData( $lat, $lng, $type, $zip, $rate ){
+		$ins = "INSERT INTO submitlocation( lat, lng, type, zip, rate ) VALUES( ".$lat.", ".$lng.",  '" .$type. "', ".$zip.", ".$rate.")";
 		$this->db->query($ins);
 		return true;
 		}

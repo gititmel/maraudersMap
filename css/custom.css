@@ -68,7 +68,7 @@ h1{
 	height 		: 90vh;
 }
 
-#about-page:hover{
+#click-about:hover{
 	color 		: white;
 }
 
@@ -103,6 +103,13 @@ h1{
 	color 		:white;
 }
 
+#content{
+	padding-top		: 10vh;
+	padding-right	: 5vw;
+	padding-left 	: 5vw; 	
+	color 			: #C3CAD1;
+	font-size 		: 2vh; 
+}
 
 .rating {
     float:left;
@@ -131,7 +138,7 @@ h1{
 }
 
 .rating:not(:checked) > label:before {
-    content: '★ ';
+    content: "★";
 }
 
 .rating > input:checked ~ label {

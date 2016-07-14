@@ -32,19 +32,11 @@
 	 	 		<h1>the MAP</h1>
  	 		</div>
  	 		<div class="col-md-4" id="searchBar">
- 	 			<form class="form-search">
- 	 				<div class="input-append">
-<!-- 		    	<input id="address" type="text">
- -->		    	<input id ="submit" type="button" class="btn" value="Go!">
-		    	<i class="fa fa-search" aria-hidden="true"></i>
-					<!-- <div class="input-append">
-				    	<i class="fa fa-compass" aria-hidden="true"></i>
-				    	<input type="text" class="span2 search-query">
-				    	<button type="submit" class="btn">Go!</button>	
-				    	<i class="fa fa-search" aria-hidden="true"></i>
-			  		</div> -->
-				</form>
- 	 		</div>
+ 
+		    <!-- 	<input id="address" type="text">
+		    	<input id ="submit" type="button" class="btn" value="Go!">
+		    	 -->
+	 		</div>
  	 	</div>
  	 	
  	 
@@ -56,54 +48,67 @@
 
 	<div class="row">
 		<div class="col-md-6" id="about-page">
+
 			<h2 id="click-about">about</h2>
 			<span id="click-close-ab">X</span>
+			<div id="content">
+			<p>You know that feeling.</p>
+			<p>Nature's calling and you are far from home. The closest coffee franchise has the bathroom under enough layers of security to put Hillary's email server to shame.</p>
+			<p>This webmap is for you: the runner, cyclist, flaneur, urban wanderer.</p>
+			<p>Search for what you need, or add your secret spot to our library of urban oases.</p>
+			</div>
 		</div>
 		
 		<div class="col-md-6" id="submit-page">
+
 			<h2 id="click-submit">submit</h2>
 			<span id="click-close-sub">X</span>
-
-			<form class="form-horizontal">
-				<div class="form-group">
+		<div id="content">
+				<div class="row">
+					<div class="col-sm-4">
 					<label for="address" class="col-sm-2 control-label">Location</label>
+					</div>
 					<div class="col-sm-6">
 						<input type="text" class="form-control" id="address" placeholder="Enter Location">
 					</div>
-				</div>		
+				</div>	
 
-				<div class="form-group">
+				<div class="row">
+					<div class="col-sm-4">
+
 					<label for="type" class="col-sm-2 control-label">Type</label>
+					</div>
 					
 					<div class="col-sm-6">
 					<div class="dropdown">
-						<button class="btn btn-default dropdown-toggle" type="button" id="type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						This is a...
-						<span class="caret"></span>
-						</button>						
-
-						<ul class="dropdown-menu" aria-labelledby="type">
-							<li>Bathroom</li>
-		    				<li>Toilet</li>
-		    				<li>Water Fountain</li>
-		    				<li>Spray Shower</li>
-					   	</ul>
+					   	<select class="form-control" id="type">
+						    <option value="bathroom">Bathroom</option>
+						    <option value="toilet">Toilet</option>
+						    <option value="water">Water Fountain</option>
+						    <option value="spray">Spray Shower</option>
+						</select>
 					 </div>
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="row">
+				<div class="col-sm-4">
 				 <label for="rate" class="col-sm-2 control-label">Rating</label>
+				 </div>
 					<div class="col-sm-6">
-					<fieldset class="rating">
-				    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
-				    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Meh">3 stars</label>
-				    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Kinda bad">2 stars</label>
-				    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Sucks big time">1 star</label>
+					<fieldset class="rating" id="rate">
+				    	<input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
+				    	<input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Meh">3 stars</label>
+				    	<input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Kinda bad">2 stars</label>
+				   	 	<input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Sucks big time">1 star</label>
 				    </fieldset>
 				  </div>
 				</div>
-			</form>
+				<div class="col-sm-4"></div>
+				<div class="col-sm-6">
+					<button type="button" id="submit" class="btn btn-default">save!</button>
+				</div>
+		</div>
 		
 		</div>
 		
@@ -114,7 +119,6 @@
    <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR0JUJgFB1hzr_L8OLDWceixaGAGUEH2o&callback=initMap">
     </script>
-    <script src="js/rating.min.js"></script>
   </body>
 </html>
 

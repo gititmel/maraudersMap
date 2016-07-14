@@ -1,5 +1,5 @@
 <?php 
-include("api/obj/dbCon.php");
+include("dbcon.php");
 $conn = new dbCon();
 $conn->search();
 
