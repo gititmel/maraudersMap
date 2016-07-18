@@ -1,6 +1,5 @@
-<?php 
-include("api/obj/dbCon.php");
+<?php
+include("dbcon.php");
 $conn = new dbCon();
 $conn->search();
-
 ?>

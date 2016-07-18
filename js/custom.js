@@ -1,34 +1,38 @@
 $( document ).ready( function(){
 	console.log("jQuery linked")
 
-	$( "#click-close").hide();
+	$( "#click-close-sub").hide();
+	$( "#click-close-ab").hide();
 
 	$( "#click-submit")
 	.click( function() { 
-		$("#submit-form")
-		.animate( { bottom:"0px" }, 500,"linear");
-		$("#click-close").show();
+		$("#submit-page")
+		.animate( { bottom:"0px" }, 350,"linear");
+		$("#click-close-sub").show();
 	});
 
-	$( "#click-close")
+	$( "#click-close-sub")
 	.click( function() {
-		$("#submit-form")
-		.animate( { bottom:"-80vh" }, 500,"linear");
-		$( "#click-close").hide();
-	})
-	// $( "#click-about")
-	// .click( function() { 
-	// 	$("#about-page")
-	// 	.animate( { bottom:"0px" }, 500,"linear");
-	// 	$("#click-close").show();
+		$("#submit-page")
+		.animate( { bottom:"-80vh" }, 200,"linear");
+		$( "#click-close-sub").hide();
+	});
 
-	// 			$( "#click-close")
-	// 			.click( function() { 
-	// 			$("#submit-form")
-	// 			.animate( { bottom:"-80vh" }, 500,"linear");
-	// 			$( "#click-close").hide();
-	// 		})
-	// 	})
+	$( "#click-about")
+	.click( function() { 
+		$("#about-page")
+		.animate( { bottom:"0px" }, 350,"linear");
+		$("#click-close-ab").show();
+	});
+
+	$( "#click-close-ab")
+	.click( function() {
+		$("#about-page")
+		.animate( { bottom:"-80vh" }, 200,"linear");
+		$( "#click-close-ab").hide();
+	});
+
+	$('.dropdown-toggle').dropdown()
 	
 })
 

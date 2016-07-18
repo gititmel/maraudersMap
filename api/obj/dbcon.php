@@ -4,7 +4,6 @@
 	 * use the dbCon() methods to send or get data to and from database.
 	 */
 	class dbCon{
-		//Update these to match your database
 		private $conn;
 		public $data;
 		private $db;
@@ -13,37 +12,39 @@
 		private $password	= '';
 		private $host 		= 'localhost';
 		public function __construct(){
-		
+
 		$this->db = new mysqli( $this->host, $this->username, $this->password, $this->dbName );
 		// Check connection
 		if ($this->db->connect_error) {
 	    	die("Connection failed: " . $this->db->connect_error);
 			}
-		// else {
-		// 	echo "success";} 	
+		else {
+			echo "dbconn connected";}
 		}
+//search a location
+
 		public function search(){
 			$arr = array();
 			$sql = "SELECT * FROM submitlocation";
 			$r = $this->db->query($sql);
 			$num = $r->num_rows;
-			// print_r($r);
-			for($i = 0; $i < $num; $i++){ 
+
+			//print_r($r);
+			for($i = 0; $i < $num; $i++){
 							$row = mysqli_fetch_array($r);
 							// print_r($row);
-							array_push($arr, array("id"=>$row['ID'], "lat"=>$row['lat'], "lng"=>$row['lng'], "type"=>$row['type'], "zip"=>$row['zip']));
+							array_push($arr, array("id"=>$row['ID'], "lat"=>$row['lat'], "lng"=>$row['lng'], "type"=>$row['type'], /*"zip"=>$row['zip'],*/ "rate"=>$row['rate']));
 						}
-			// print_r($arr);
-			echo json_encode($arr);			
+			echo json_encode($arr);
 		}
-	
+
 		/**
 		 * getDB() selects the database connection
 		 */
 		public function getDb() {
 			return $this->db;
 		}
-		
+
 		/**
 		 * closeDB() closes database connection
 		 */
@@ -54,19 +55,24 @@
 		 * pullRecord() gets all the records in a table
 		 * $tID 		is the database table name
 		 */
-		public function handleDemoData( $lat, $lng, $type, $zip ){
-		$ins = "INSERT INTO submitlocation( lat, lng, type, zip ) VALUES( ".$lat.", ".$lng.",  '" .$type. "', ".$zip.")";
-		$this->db->query($ins);
+		public function handleDemoData( $lat, $lng, $type, $rate ){
+			$ins = "INSERT INTO submitlocation( lat, lng, type, rate ) VALUES( '$lat', '$lng','$type','$rate')";
+			$this->db->query($ins);
 		return true;
 		}
-		
+
+		public function displayData( $lat, $lng, $type, $rate ){
+			$show = "INSERT INTO submitlocation( lat, lng, type, rate ) VALUES( '$lat', '$lng','$type','$rate')";
+			$this->db->query($show);
+		return true;
+		}
+
 		/**
-		 * pullRecordWithParameters() selects a record from the database using parameters 
+		 * pullRecordWithParameters() selects a record from the database using parameters
 		 * sent to as an array
 		 * $tID 				is the database table name
 		 * $where 				parameters for record search
-		 
-	CODE ---> 	 
+**/
 		public function pullRecordWithParameters( $tID, $where ) {
 			if( !isset( $where ) ) $where = array();
 			$result = $this->sqlExecute( 'select', $tID, $where );
@@ -76,8 +82,8 @@
 			}
 		  return $retArr;
 		}
-		/**
-		 * inserRecord() inserts a record into a database table
+/*
+		 * $insertRecord() inserts a record into a database table
 		 * $table 		database table name
 		 * $fields 		database table field names in an array
 		 * $values 		database table field values in an array
@@ -104,30 +110,30 @@
 		 * $fields 			array of fields to be updated
 		 * $values 			array of values for fields to be updated
 		 * $where 			array of field conditions
-		 $ $whereVal 		array of field value conditions
+		 * $whereVal 		array of field value conditions
 		 */
 		public function updateRecord( $table, $fields, $values, $where, $whereVal ){
 			$qryStr = '';
 			$qryStr .= 'UPDATE '.$table.' set ';
 			if (isset($fields) && count($fields)>0) {
 				for($f = 0; $f < count($fields); $f++ ) {
-					$values[$f] = cleanUp( $values[$f] ); 
-					if( !is_numeric ($values[$f] ) ){ 
-						$values[$f] = "'".$values[$f]."'"; 
-					}else{ 
-						$values[$f] = $values[$f]; 
-					} 
+					$values[$f] = cleanUp( $values[$f] );
+					if( !is_numeric ($values[$f] ) ){
+						$values[$f] = "'".$values[$f]."'";
+					}else{
+						$values[$f] = $values[$f];
+					}
 					$qryStr .= $fields[$f].' = '.$values[$f];
 				}
 			}
 			$qryStr .= ' WHERE ';
 			if (isset($where) && count($where)>0) {
 				for($w = 0; $w < count($where); $w++ ) {
-					if( !is_numeric ($whereVal[$w] ) ){ 
-						$whereVal[$w] = "'".$whereVal[$w]."'"; 
-					}else{ 
-						$whereVal[$w] = $whereVal[$w]; 
-					} 
+					if( !is_numeric ($whereVal[$w] ) ){
+						$whereVal[$w] = "'".$whereVal[$w]."'";
+					}else{
+						$whereVal[$w] = $whereVal[$w];
+					}
 					if( $w == count($where) - 1 ){
 						$qryStr .= $where[$w]." = ".$whereVal[$w];
 					}
@@ -137,7 +143,7 @@
 				}
 			}
 			$result 		= $this->db->query($qryStr);
-			
+
 			return $result;
 		}
 		/**
@@ -154,17 +160,17 @@
 					if (isset($param) && count($param)>0) {
 						$qryStr .= ' WHERE';
 						foreach($param as $key => $value) {;
-							
+
 							if(!is_numeric($value)) $value = '"'.$value.'"';
 							$qryStr .= ' '.$key.'='.$value;
-							
+
 							$paramIndex++;
 							if($paramIndex < count($param)){
 								$qryStr .= ' AND ';
 							}
 						}
 					}
-					
+
 					break;
 				default:
 					$valid = false;
@@ -172,7 +178,7 @@
 			}
 			if ($valid) {
 				$qryStr .= ';';
-				$result = $this->db->query($qryStr);	
+				$result = $this->db->query($qryStr);
 			}
 		  return $result;
 		}
