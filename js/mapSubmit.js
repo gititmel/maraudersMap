@@ -1,34 +1,25 @@
-var submitBox, lat, lng, map, marker, infoWindow, pos, zip, ratingValue
+var submitbox, lat, lng, map, marker, infoWindow, pos, ratingValue, newLat, newLng
 
+
+//JQUERY LINKING: 
 $(document).ready(function(){
     setTimeout(function(){
-      $.get("https://maps.googleapis.com/maps/api/geocode/json?&latlng="+lat+","+lng).done(function(googleData){
-
-        // console.log(googleData)
-      //   console.log(googleData.results)
-      //   console.log(googleData.results[0])
-      //   console.log(googleData.results[0].address_components)
-      //   console.log(googleData.results[0].address_components[7])
-      // console.log(googleData.results[0].address_components[7].long_name)
-
-      zip = googleData.results[0].address_components[7].long_name;
-
+      $.get("https://maps.googleapis.com/maps/api/geocode/json?&latlng="+newLat+","+newLng).done(function(googleData){
       })
-
     },500)
-    
+
     $.get("api/obj/search.php").done(function(searchResults){
-      console.log("SEARCH RESULTS: "+searchResults);
+    //  console.log("SEARCH RESULTS: "+searchResults);
     });
 
     $("#rate input[type='radio']").click( function(){
       //console.log( $(this) )
       ratingValue = $(this).val()
      //console.log( ratingValue )
-    })
-      
-      
-  })
+    });
+})
+
+//JQUERY LINK ENDS 
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -37,6 +28,12 @@ function initMap() {
 
   var geocoder = new google.maps.Geocoder();
 
+  var input = /** @type {!HTMLInputElement} */(
+            document.getElementById('address'));
+
+  var autocomplete = new google.maps.places.Autocomplete(input);
+          autocomplete.bindTo('bounds', map);
+
   document.getElementById('submit').addEventListener('click', function() {
     geocodeAddress(geocoder, map);
   });
@@ -44,45 +41,47 @@ function initMap() {
   document.getElementById('address').addEventListener('keyup', function(e) {
     if(e.keyCode==13){
       e.preventDefault()
-
       geocodeAddress(geocoder, map);}
   });
 
   function geocodeAddress(geocoder, resultsMap) {
-
     var address = document.getElementById('address').value;
-    geocoder.geocode({'address': address}, function(results, status) {
+
+    geocoder.geocode({'address': address}, function(results, status){
 
       if (status === google.maps.GeocoderStatus.OK) {
 
         resultsMap.setCenter(results[0].geometry.location);
 
-        var addMarker = new google.maps.Marker({
+        newLat = results[0].geometry.location.lat(); 
+        newLng = results[0].geometry.location.lng();
+
+        console.log("NEW POSITION: "+newLat+newLng);
+
+        var addressMarker = new google.maps.Marker({
           map     : resultsMap,
           position: results[0].geometry.location
         });
-          
-          console.log(results[0].geometry.location);
-          
-          addMarker.setMap(map);
 
-          saveData();
-          
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
+        addressMarker.setMap(map);
+        saveData();
+        //searchData();
+
+ console.log(results[0].geometry.location);
+      } else {
+
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
         });
-    } //end geocodeAddress fnc
+  } //<--- END geocodeAddress fnc 
 
+// save location data from info window: 
 
+  //submitBox = "You're here!<br><button type='button' id='submitbox'>save this location</button>";
+  // submitBox.addListener('click', function() {
+  //   geocodeAddress(geocoder, map);
+  // });
 
-  submitBox = "<table>" +
-                 "<tr><td>Type:</td> <td><select id='type'>" +
-                 "<option value='bathroom' SELECTED>Bathroom</option>" +
-                 "<option value='toilet'>Toilet</option>" +
-                  "<option value='water'>Water fountain</option>" +
-                 "</select> </td></tr>" +
-                 "<tr><td></td><td><input type='button' value='submit' onclick='saveData()'/></td></tr>";
 
         // Try HTML5 geolocation.
   if (navigator.geolocation) {
@@ -95,41 +94,50 @@ function initMap() {
     lat = position.coords.latitude;
     lng = position.coords.longitude;
 
-      // infoWindow.setPosition(pos);
-      
     map.setCenter(pos);
 
-    marker = new google.maps.Marker({
+    currentMarker = new google.maps.Marker({
       map: map,
       position: pos,
-      title: "You are here",
       animation: google.maps.Animation.DROP,
     });
 
     infoWindow = new google.maps.InfoWindow({
-      content: submitBox
+      content: "you're here!",
     });
 
-      marker.addListener('click', function() {
-      infoWindow.open(map, marker);
+      currentMarker.addListener('mouseover', function() {
+      infoWindow.open(map, currentMarker);
     });
-
-     console.log(pos);
+// infoWindow.open(map, currentMarker);
+     console.log("CURRENT POSITION: "+lat+lng);
     },
 
           function() {
             handleLocationError(true,infoWindow, map.getCenter());
           });
-  } 
+  } //<--- end of current Geolocation
 
         else {
           // Browser doesn't support Geolocation
           handleLocationError(false, infoWindow, map.getCenter());
         }
-  }
+
+        google.maps.event.addListener(map, 'click', function(event) {
+          addMarker(event.latLng, map);
+        });
+
+        function addMarker(location, map) {
+          var marker = new google.maps.Marker({
+          position: location,
+          label: "!",
+          map: map
+        });
+      }
 
 
-
+  } //<-- end of initMap
+      
       function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
@@ -137,40 +145,51 @@ function initMap() {
                               'Error: Your browser doesn\'t support geolocation.');
       }
 
+
 function saveData() {
   var type = document.getElementById("type").value;
-  var latlng = pos;
-  var rate = ratingValue; 
+  var rate = ratingValue;
 
-  $.post("submitData.php",{type: type, lat: pos.lat, lng: pos.lng, zip:zip, rate:rate }).done(function(data){
-    console.log(data)
+  $.post("submitData.php",{type: type, lat: newLat, lng: newLng, /*zip:zip,*/ rate:rate }).done(function(data){
+    console.log("SUCCESS! Data saved :"+newLat+newLng+type+rate);
   })
+}
 
-      // var url = "submitData.php?type=" + type + "&lat=" + latlng.lat() + "&lng=" + latlng.lng();
-      // downloadUrl(url, function(data, responseCode) {
-      //   if (responseCode == 200 && data.length >= 1) {
-      //     infowindow.close();
-      //     document.getElementById("message").innerHTML = "Location added.";
-      //   }
-    //  });
+function searchData() {
+  $.post("api/obj/search.php").done(function(data){
+    jsonobj = JSON.parse( data )
+    // console.log(jsonobj);
+    // console.log(jsonobj[0]);
+    // console.log("NEW LAT IS: "+jsonobj[7].lat);
+    // console.log("NEW LNG IS: "+jsonobj[7].lng);
+    // console.log("TYPE IS: "+jsonobj[7].type);
+    // console.log("RATING IS: "+jsonobj[7].rate);
 
+for ( i = 0; i < jsonobj.length; i++ ){
+
+ markerPos ={
+        lat: parseFloat(jsonobj[i].lat),
+        lng: parseFloat(jsonobj[i].lng)
+      };
+
+markerType = jsonobj[i].type;
+markerRate = jsonobj[i].rate;
+
+      mapMarkers = new google.maps.Marker({
+      map: map,
+      position: markerPos,
+     // icon: BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)
+    });
+      mapMarkers.setMap(map);
     }
 
+  })
+} //<----end of searchData
 
-// function downloadUrl(url, callback) {
-//       var request = window.ActiveXObject ?
-//           new ActiveXObject('Microsoft.XMLHTTP') :
-//           new XMLHttpRequest;
 
-//       request.onreadystatechange = function() {
-//         if (request.readyState == 4) {
-//           request.onreadystatechange = doNothing;
-//           callback(request.responseText, request.status);
-//         }
-//       };
 
-//       request.open('POST', url, true);
-//       request.send(null);
-//     }
+setTimeout(function(){
+ searchData()}, 2000);
+  
 
-//     function doNothing() {}
+

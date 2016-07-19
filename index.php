@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="css/bootstrap-theme.css">
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
-		
+
 	<script src="js/jquery.2.2.4.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap.js"></script>
@@ -23,23 +23,19 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
  </head>
- 
+
   <body>
- 
+
  	 <div class="container-fluid">
  	 	<div class ="row" id="topBar">
  	 		<div class="col-md-8" id="title">
 	 	 		<h1>the MAP</h1>
  	 		</div>
  	 		<div class="col-md-4" id="searchBar">
- 
-		    <!-- 	<input id="address" type="text">
-		    	<input id ="submit" type="button" class="btn" value="Go!">
-		    	 -->
 	 		</div>
  	 	</div>
- 	 	
- 	 
+
+
 	</div>
 
  	 <div class="row" id="centerBar">
@@ -58,30 +54,31 @@
 			<p>Search for what you need, or add your secret spot to our library of urban oases.</p>
 			</div>
 		</div>
-		
+
 		<div class="col-md-6" id="submit-page">
 
 			<h2 id="click-submit">submit</h2>
 			<span id="click-close-sub">X</span>
 		<div id="content">
 				<div class="row">
-					<div class="col-sm-4">
+					<!-- <div class="col-sm-2">
 					<label for="address" class="col-sm-2 control-label">Location</label>
+					</div> -->
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="address" placeholder="enter your location">
 					</div>
-					<div class="col-sm-6">
-						<input type="text" class="form-control" id="address" placeholder="Enter Location">
-					</div>
-				</div>	
+				</div>
 
 				<div class="row">
-					<div class="col-sm-4">
+					<!-- <div class="col-sm-2">
 
 					<label for="type" class="col-sm-2 control-label">Type</label>
-					</div>
-					
-					<div class="col-sm-6">
+					</div> -->
+
+					<div class="col-sm-10">
 					<div class="dropdown">
 					   	<select class="form-control" id="type">
+                <option value="null">This is a...(select one)</option>
 						    <option value="bathroom">Bathroom</option>
 						    <option value="toilet">Toilet</option>
 						    <option value="water">Water Fountain</option>
@@ -92,10 +89,10 @@
 				</div>
 
 				<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-2">
 				 <label for="rate" class="col-sm-2 control-label">Rating</label>
 				 </div>
-					<div class="col-sm-6">
+					<div class="col-sm-8">
 					<fieldset class="rating" id="rate">
 				    	<input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
 				    	<input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Meh">3 stars</label>
@@ -109,20 +106,15 @@
 					<button type="button" id="submit" class="btn btn-default">save!</button>
 				</div>
 		</div>
-		
+
 		</div>
-		
+
 		</div>
 	</div>
 
  <script type="text/javascript" src="js/mapSubmit.js"></script>
    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR0JUJgFB1hzr_L8OLDWceixaGAGUEH2o&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR0JUJgFB1hzr_L8OLDWceixaGAGUEH2o&callback=initMap&libraries=places">
     </script>
   </body>
 </html>
-
-
-
-
- 
