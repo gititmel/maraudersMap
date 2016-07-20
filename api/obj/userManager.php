@@ -28,14 +28,14 @@ class UserManager{
 		 if( !isset($_SESSION) ){
 		 	 session_start();
 		 }
-		
+
 		 session_regenerate_id();
 
 		//ASSIGN USER VARIABLES
 		$this->sessionID 				= session_id();
 		//CREATE SESSION COOKIES
 		$_SESSION[ 'LAST_ACTIVITY' ] 	= time();
-		
+
 		 $_SESSION[ 'userID' ] 			= $userID;
 		 $_SESSION[ 'sessionID' ] 		= $this->sessionID;
 		 $_SESSION[ 'browserName' ] 	= $this->sysMgr->getBrowserName();
@@ -43,20 +43,20 @@ class UserManager{
 		 $_SESSION[ 'platform' ] 		= $this->sysMgr->getPlatform();
 
 		// //CLOSE PREVIOUS SESSIONS
-		 $u 	= $this->dbCon->updateRecord( 
-										"user_session", 
+		 $u 	= $this->dbCon->updateRecord(
+										"user_session",
 										array( "active"), 	//fieldToUpdate
 										array( 0 ),  			//fieldValue
 										array( "userID" ), 		// Where
 										array( $userID )	// Values of Where
 										);
 		// //RECORD NEW SESSION
-		$q = $this->dbCon->insertRecord( 
-								"user_session", 
-								array("userID", "sessionID", "active", "browsername", "browserversion", "osplatform" ), 
-								array( $userID, $this->sessionID, 1, $_SESSION[ 'browserName' ], $_SESSION[ 'browserVersion' ], $_SESSION[ 'platform' ] ) 
+		$q = $this->dbCon->insertRecord(
+								"user_session",
+								array("userID", "sessionID", "active", "browsername", "browserversion", "osplatform" ),
+								array( $userID, $this->sessionID, 1, $_SESSION[ 'browserName' ], $_SESSION[ 'browserVersion' ], $_SESSION[ 'platform' ] )
 								);
-		
+
 		return $userID;
 
 	}
@@ -65,8 +65,8 @@ class UserManager{
 		//logout procedures go here
 		if( $sesID != session_id() ){ $sesID = session_id(); }
 
-		$u 	= $this->dbCon->updateRecord( 
-											"user_session", 
+		$u 	= $this->dbCon->updateRecord(
+											"user_session",
 											array( "active"), 	//fieldToUpdate
 											array( 0 ),  			//fieldValue
 											array( "sessionID" ), 		// Where
@@ -89,22 +89,22 @@ class UserManager{
 	 */
 	private function getUser( $argType, $userData ){
 		switch( $argType ){
-			case 'userName'			: 
+			case 'userName'			:
 				$q = $this->dbCon->pullRecordWithParameters( "users", array( "userName" => $userData ));
 				break;
-			case 'userID'			: 
-				$q = $this->dbCon->pullRecordWithParameters( "users", array( "userID" => $userData ) ); 
+			case 'userID'			:
+				$q = $this->dbCon->pullRecordWithParameters( "users", array( "userID" => $userData ) );
 				break;
-			case 'verificationCode'	: 
-				$q = $this->dbCon->pullRecordWithParameters( "users", array( "verificationCode" => $userData ) ); 
+			case 'verificationCode'	:
+				$q = $this->dbCon->pullRecordWithParameters( "users", array( "verificationCode" => $userData ) );
 				break;
 		}
 
 		$this->userRecord	= $q;
 		$recordCount = count($this->userRecord);
 
-		if( $recordCount  > 0 ){ 
-			$exists = true; 
+		if( $recordCount  > 0 ){
+			$exists = true;
 		}else{ $exists = false; }
 
 		return $exists;
@@ -157,7 +157,7 @@ class UserManager{
 	}
 
 	private function getUserRoles(){
-	
+
 	}
 
 
@@ -197,19 +197,19 @@ class UserManager{
 		//$result = false;
 		$status = "NA";
 		$test = '';
-		
+
 		if( $this->getUser( "userName", $username ) ){
 
 			//$result 			= true;
 			$pwHash 			= $this->userRecord[0]['auth'];
-		
-			//if( validate_password( $password, $pwHash ) ){	
+
+			//if( validate_password( $password, $pwHash ) ){
 				//OPEN USER SESSIONS
 				$this->initiateSession( $this->userRecord[0]['userID'] );
 				//RETURN 'ME' JSON OBJECT
 				$result['status'] = 'User logged in';
 				$result['token'] = $this->me();
-				//return 
+				//return
 			//}
 		}else{
 			$result['status'] = "no user";
@@ -235,7 +235,7 @@ class UserManager{
 
 	public function passwordResetRequest(){
 
-	} 
+	}
 
 	public function verifyResetCode( ){
 

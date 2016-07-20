@@ -1,49 +1,56 @@
-html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-*{
-	font-family	: "Trebuchet MS", Helvetica, sans-serif;
-}
+@import 'https://fonts.googleapis.com/css?family=Work+Sans';
 
-#map {
-        height: 100%;
+html, body {
+        height      : 100%;
+        margin      : 0;
+        padding     : 0;
+            }
+
+#map{
+        position: absolute;
+        height  : 100%;
+        width   : 100%;
+        /*border      : 1px solid black;*/
+
       }
 
 #topBar{
-	background 		: white;
+	background 	: white;
 	height 			: 10vh;
 	width 			: 100vw;
 	position 		: fixed;
-	top 			: 0px;
+	top 			  : 0px;
+  font-family: 'Montserrat', sans-serif;
+  /*border      : 1px solid black;*/
+
 }
 
-#title{
+/*#title{
 	position 	: absolute;
 	left 		: 0px;
 	height 		: 100%;
-}
+}*/
 
 
 #centerBar{
-	position 		: absolute;
-	top 			: 10vh;
+	position 		: relative;
+	top 			  : 10vh;
 	height 			: 80vh;
-	width 			: 100%;
+  /*border      : 1px solid black;*/
 }
 
-#searchBar{
+/*#searchBar{
 	margin 		: auto;
 	padding 	: 2vh;
 	position 	: absolute;
 	right 		: 0px;
 	height 		: 100%;
 
-}
+}*/
 
 h2{
 	letter-spacing: 2px;
+  color         :#C3CAD1;
 }
 
 h1{
@@ -60,12 +67,16 @@ h1{
 }*/
 
 #about-page{
-	background 	: #52595B;
+	background: #52595B;
 	position 	: fixed;
-	left 		: 0px;
+	left 		  : 0px;
 	bottom 		: -80vh;
 	width 		: 50%;
 	height 		: 90vh;
+  color     :#C3CAD1;
+  font-family: "Work Sans";
+  /*border    : 1px solid black;*/
+
 }
 
 #click-about:hover{
@@ -74,13 +85,19 @@ h1{
 
 #submit-page{
 	background 	: #52595B;
+  font-family: "Work Sans";
 	position 	: fixed;
 	right 		: 0px;
 	bottom 		: -80vh;
 	width 		: 50%;
 	height 		: 90vh;
-}
+  color     : #C3CAD1;
+  /*border      : 1px solid black;*/
 
+}
+#top-buffer{
+  margin-top:20px;
+}
 #click-submit:hover{
 	color 		: white;
 }
@@ -108,17 +125,19 @@ h1{
 	padding-right	: 5vw;
 	padding-left 	: 5vw;
 	color 			: #C3CAD1;
-	font-size 		: 2vh;
+	font-size 		: 13pt;
+  font-family: 'Work Sans', sans-serif;
+
 }
 
 #address{
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
-        width: 300px;
+        background-color  : #fff;
+        font-family       : Roboto;
+        font-size         : 15px;
+        font-weight       : 300;
+        padding           : 0 11px 0 13px;
+        text-overflow     : ellipsis;
+        width             : 300px;
       }
 
 #address:focus {

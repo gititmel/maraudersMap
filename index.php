@@ -10,6 +10,8 @@
 	<link rel="stylesheet" href="css/bootstrap-theme.css">
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Work+Sans:700" rel="stylesheet">
+
 
 	<script src="js/jquery.2.2.4.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -28,14 +30,12 @@
 
  	 <div class="container-fluid">
  	 	<div class ="row" id="topBar">
- 	 		<div class="col-md-8" id="title">
+ 	 		<!-- <div class="col-md-8" id="title"> -->
 	 	 		<h1>the MAP</h1>
- 	 		</div>
- 	 		<div class="col-md-4" id="searchBar">
-	 		</div>
+ 	 		<!-- </div> -->
+ 	 		<!-- <div class="col-md-4" id="searchBar">
+	 		</div> -->
  	 	</div>
-
-
 	</div>
 
  	 <div class="row" id="centerBar">
@@ -45,8 +45,8 @@
 	<div class="row">
 		<div class="col-md-6" id="about-page">
 
-			<h2 id="click-about">about</h2>
-			<span id="click-close-ab">X</span>
+			<h2 id="click-about">ABOUT</h2>
+			<span id="click-close-ab">CLOSE</span>
 			<div id="content">
 			<p>You know that feeling.</p>
 			<p>Nature's calling and you are far from home. The closest coffee franchise has the bathroom under enough layers of security to put Hillary's email server to shame.</p>
@@ -57,8 +57,8 @@
 
 		<div class="col-md-6" id="submit-page">
 
-			<h2 id="click-submit">submit</h2>
-			<span id="click-close-sub">X</span>
+			<h2 id="click-submit">SUBMIT</h2>
+			<span id="click-close-sub">CLOSE</span>
 		<div id="content">
 				<div class="row">
 					<!-- <div class="col-sm-2">
@@ -66,10 +66,11 @@
 					</div> -->
 					<div class="col-sm-10">
 						<input type="text" class="form-control" id="address" placeholder="enter your location">
+            <input type="button" onclick="geolocate()" value ="use my location">
 					</div>
 				</div>
 
-				<div class="row">
+				<div class="row" id="top-buffer">
 					<!-- <div class="col-sm-2">
 
 					<label for="type" class="col-sm-2 control-label">Type</label>
@@ -77,8 +78,8 @@
 
 					<div class="col-sm-10">
 					<div class="dropdown">
-					   	<select class="form-control" id="type">
-                <option value="null">This is a...(select one)</option>
+					   	<select class="form-control" id="type" required>
+                <option value=" ">This is a...(select one)</option>
 						    <option value="bathroom">Bathroom</option>
 						    <option value="toilet">Toilet</option>
 						    <option value="water">Water Fountain</option>
@@ -88,10 +89,8 @@
 					</div>
 				</div>
 
-				<div class="row">
-				<div class="col-sm-2">
-				 <label for="rate" class="col-sm-2 control-label">Rating</label>
-				 </div>
+				<div class="row" id="top-buffer">
+				<div class="col-sm-2">Rate it!</div>
 					<div class="col-sm-8">
 					<fieldset class="rating" id="rate">
 				    	<input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Pretty good">4 stars</label>
@@ -106,11 +105,10 @@
 					<button type="button" id="submit" class="btn btn-default">save!</button>
 				</div>
 		</div>
+  </div>
 
-		</div>
-
-		</div>
-	</div>
+  <div id="confirmation"> </div>
+</div>
 
  <script type="text/javascript" src="js/mapSubmit.js"></script>
    <script async defer

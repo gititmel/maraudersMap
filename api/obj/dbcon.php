@@ -82,6 +82,7 @@
 				$retArr[] = $row;
 			}
 		  return $retArr;
+			echo $retArr;
 		}
 /*
 		 * $insertRecord() inserts a record into a database table
